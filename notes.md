@@ -28,7 +28,7 @@ class record that holds the x and y values. This represents its place in the 2d 
 This is the method that takes in the 2d array of the image and returns a group of the highest to lowest islands of white pixels that are touching vertically or horizontally.
 
 ## Binarizing ImageGroupFinder: 
-    uses banarizer and groupFinder. Accepts a bufferedImage, and uses the Image Binarizer to create a usable binary image of black and white. 
+    uses binarizer and groupFinder. Accepts a bufferedImage, and uses the Image Binarizer to create a usable binary image of black and white. 
     Uses the group finder to locate the islands. 
     We return a descending sorted list of islands (connected white pixels).
 

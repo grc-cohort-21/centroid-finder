@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
@@ -33,15 +34,39 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
+        List<Group> groupList = new ArrayList<>();
+        boolean[][] visited = new boolean[image.length][image[0].length];
+
+
         //find the first white pixel (on: 1) create a group 
+        for(int r=0; r<image.length; r++){
+            for(int c=0; c<image[0].length; c++){
+                if(!visited[r][c]){
+                    visited[r][c] = true;
+                    if(image[r][c] == 1){   //found a one not yet visited
+                        //create group 
+                        Coordinate point = new Coordinate(r,c);
+                        Group currentGroup = createGroup(point, 0, visited, image);
+                        groupList.add(currentGroup);
+                    }
+                }
+            }
+        }
         //dfs through touching white pixels until we have found every pixel in the group
         //find the next pixels that are on and not already found (maybe a vistedset)
         //repeat until we have checked all pixels
         //sort groups in the List
         //return the list.
-
-
-        return null;
+        return groupList;
     }
     
+    private Group createGroup(Coordinate point, int size, boolean[][] visited, int[][] image){
+        
+
+
+        return new Group();
+    }
+
+
+
 }

@@ -33,6 +33,14 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
+        //find the first white pixel (on: 1) create a group 
+        //dfs through touching white pixels until we have found every pixel in the group
+        //find the next pixels that are on and not already found (maybe a vistedset)
+        //repeat until we have checked all pixels
+        //sort groups in the List
+        //return the list.
+
+
         return null;
     }
     

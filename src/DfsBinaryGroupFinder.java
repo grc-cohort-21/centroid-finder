@@ -41,7 +41,6 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     public List<Group> findConnectedGroups(int[][] image) {
         Map<String, Integer> map = new HashMap<>();
 
-
         List<Group> groupList = new ArrayList<>();
 
         for(int r = 0; r < image.length; r++){
@@ -49,8 +48,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
 
                 if(image[r][c] == 1){
                     map.put("size", 1);
-                    map.put("maxX", 0);
-                    map.put("maxY", 0);
+                    map.put("maxX", c);
+                    map.put("maxY", r);
                     image[r][c] = 2;
                     dfs(image, new Coordinate(c, r), map);
 
@@ -78,7 +77,7 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             map.put("maxX", map.get("maxX")+newC);
             map.put("maxY", map.get("maxY")+newR);
 
-            dfs(image,new Coordinate(newR,newC), map);
+            dfs(image,new Coordinate(newC,newR), map);
             
         }
 

@@ -40,28 +40,24 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
         Map<String, Integer> map = new HashMap<>();
-        map.put("size", 1);
-        map.put("maxX", 0);
-        map.put("maxY", 0);
+
 
         List<Group> groupList = new ArrayList<>();
 
         for(int r = 0; r < image.length; r++){
-            for(int c = 0; c < image[0].length - 1; c++){
+            for(int c = 0; c < image[0].length; c++){
 
-                Coordinate point = new Coordinate(r, c);
-
-                if(image[point.y()][point.x()] == 1){
-                    image[point.y()][point.x()] = 2;
-                    dfs(image, point, map);
+                if(image[r][c] == 1){
+                    map.put("size", 1);
+                    map.put("maxX", 0);
+                    map.put("maxY", 0);
+                    image[r][c] = 2;
+                    dfs(image, new Coordinate(c, r), map);
 
                     Coordinate centroid = new Coordinate(map.get("maxX")/map.get("size"), map.get("maxY")/map.get("size"));
                     Group island = new Group(map.get("size"), centroid);
                     groupList.add(island);
 
-                            map.put("size", 1);
-                            map.put("maxX", 0);
-                            map.put("maxY", 0);
                 }
             }
         }
@@ -72,8 +68,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
         int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
 
         for (int[] direction : directions) {
-            int newR = point.x() + direction[0];
-            int newC = point.y() + direction[1];
+            int newR = point.y() + direction[0];
+            int newC = point.x() + direction[1];
 
             if(newR < 0 || newR >= image.length || newC < 0 || newC >= image[0].length || image[newR][newC] != 1) continue;
             image[newR][newC] = 2;

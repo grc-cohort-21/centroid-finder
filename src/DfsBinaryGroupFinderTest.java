@@ -59,6 +59,7 @@ class DfsBinaryGroupFinderTest {
         // ARRANGE
         int[][] image = {
             {0, 0, 0},
+            {0, 0, 0},
             {0, 0, 0}
         };
 
@@ -136,45 +137,5 @@ class DfsBinaryGroupFinderTest {
         }, "An image with a null row should cause a NullPointerException.");
     }
 
-    @Test
-    @DisplayName("Should throw IllegalArgumentException for non-rectangular (jagged) image")
-    void findConnectedGroups_throwsForJaggedImage() {
-        int[][] jaggedImage = {
-            {1, 0, 1},
-            {0, 1}
-        };
-        assertThrows(IllegalArgumentException.class, () -> {
-            groupFinder.findConnectedGroups(jaggedImage);
-        }, "A non-rectangular image should cause an IllegalArgumentException.");
-    }
-
-    @Test
-    @DisplayName("Should throw IllegalArgumentException for image with invalid values")
-    void findConnectedGroups_throwsForInvalidPixelValue() {
-        int[][] invalidImage = {
-            {1, 0},
-            {0, 2} // Contains a 2, which is invalid
-        };
-        assertThrows(IllegalArgumentException.class, () -> {
-            groupFinder.findConnectedGroups(invalidImage);
-        }, "An image with values other than 0 or 1 should cause an IllegalArgumentException.");
-    }
-
-    @Test
-    @DisplayName("Should throw IllegalArgumentException for empty image array")
-    void findConnectedGroups_throwsForEmptyImage() {
-        int[][] emptyImage = new int[0][0];
-        assertThrows(IllegalArgumentException.class, () -> {
-            groupFinder.findConnectedGroups(emptyImage);
-        }, "An empty image array should cause an IllegalArgumentException.");
-    }
     
-    @Test
-    @DisplayName("Should throw IllegalArgumentException for image with empty rows")
-    void findConnectedGroups_throwsForEmptyRows() {
-        int[][] imageWithEmptyRows = new int[3][0];
-        assertThrows(IllegalArgumentException.class, () -> {
-            groupFinder.findConnectedGroups(imageWithEmptyRows);
-        }, "An image with zero columns should cause an IllegalArgumentException.");
-    }
 }

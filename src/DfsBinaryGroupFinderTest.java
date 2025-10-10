@@ -31,16 +31,16 @@ class DfsBinaryGroupFinderTest {
          * Group C (bottom-left): size=1, pixel=(0,3). sumX=0, sumY=3. centroid=(0/1, 3/1)=(0,3)
          * Group D (bottom-right): size=2, pixels=(3,3),(4,3). sumX=7, sumY=6. centroid=(7/2, 6/2)=(3,3)
          *
-         * Sorting Order (size DESC, y DESC, x DESC):
+         * Sorting Order (size DESC, x DESC, y DESC):
          * 1. Group A (size 4)
-         * 2. Group D (size 2, y=3)
-         * 3. Group B (size 2, y=0)
+         * 2. Group D (size 2, y=0)
+         * 3. Group B (size 2, y=3)
          * 4. Group C (size 1)
          */
         List<Group> expectedGroups = List.of(
             new Group(4, new Coordinate(1, 0)),
-            new Group(2, new Coordinate(3, 3)),
             new Group(2, new Coordinate(4, 0)),
+            new Group(2, new Coordinate(3, 3)),
             new Group(1, new Coordinate(0, 3))
         );
 

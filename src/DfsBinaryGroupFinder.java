@@ -44,8 +44,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
                     
                     //found a one not yet visited
                     //create group 
-                    Coordinate point = new Coordinate(r,c);
-                    Group currentGroup = createGroup(point, 1, image);
+                    Coordinate point = new Coordinate(r,cgit);
+                    Group currentGroup = createGroup(point, 1, r, c, image);
                     groupList.add(currentGroup);
                     
                 }
@@ -59,7 +59,7 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
         return groupList;
     }
     
-    private Group createGroup(Coordinate point, int size, int[][] image){
+    private Group createGroup(Coordinate point, int size, int xMax, int yMax, int[][] image){
         int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
 
         for (int[] direction : directions) {
@@ -69,10 +69,16 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             if(newX >= 0 && newX < image.length && newY >= 0 && newY < image[0].length && image[newX][newY] == 1){
                 image[newX][newY] = 2;
                 size++;
-                
+                xMax += newX;
+                yMax += newY;
             }
         }
-        return new Group();
+        //calculate centroid
+        int centX = xMax/size;
+        int centY = yMax/size;
+        Coordinate center = new Coordinate(centX, centY);
+        Group island = new Group(size, center);
+        return island;
     }
 
 

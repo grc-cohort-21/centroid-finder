@@ -45,7 +45,7 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
                     //found a one not yet visited
                     //create group 
                     Coordinate point = new Coordinate(r,c);
-                    Group currentGroup = createGroup(point, 0, image);
+                    Group currentGroup = createGroup(point, 1, image);
                     groupList.add(currentGroup);
                     
                 }
@@ -60,9 +60,18 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     }
     
     private Group createGroup(Coordinate point, int size, int[][] image){
-        image[point.x()][point.y()] = 2;
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
 
+        for (int[] direction : directions) {
+            int newX = direction[0] + point.x();
+            int newY = direction[1] + point.y();
 
+            if(newX >= 0 && newX < image.length && newY >= 0 && newY < image[0].length && image[newX][newY] == 1){
+                image[newX][newY] = 2;
+                size++;
+                
+            }
+        }
         return new Group();
     }
 

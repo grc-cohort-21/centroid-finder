@@ -47,7 +47,7 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
                     Coordinate point = new Coordinate(r,c);
                     Group currentGroup = createGroup(point, 0, image);
                     groupList.add(currentGroup);
-                    image[r][c] = 2;
+                    
                 }
             }
         }
@@ -60,7 +60,7 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     }
     
     private Group createGroup(Coordinate point, int size, int[][] image){
-        
+        image[point.x()][point.y()] = 2;
 
 
         return new Group();

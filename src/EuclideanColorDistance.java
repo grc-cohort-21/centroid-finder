@@ -19,6 +19,21 @@ public class EuclideanColorDistance implements ColorDistanceFinder {
      */
     @Override
     public double distance(int colorA, int colorB) {
-        return 0;
+        int mask = 0xFF;
+        int r1 = (colorA >> 16) & mask;
+        int g1 = (colorA >> 8) & mask;
+        int b1 = colorA & mask;
+        int r2 = (colorB >> 16) & mask;
+        int g2 = (colorB >> 8) & mask;
+        int b2 = colorB & mask;
+
+        
+        double red = (r1-r2);
+        double green = (g1-g2);
+        double blue = (b1-b2);
+        
+        double distance = Math.sqrt(Math.pow((red), 2.0)+Math.pow((green), 2.0)+Math.pow((blue), 2.0));
+
+        return distance;
     }
 }

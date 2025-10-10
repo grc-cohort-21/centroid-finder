@@ -76,13 +76,14 @@ class DfsBinaryGroupFinderTest {
         // ARRANGE
         int[][] image = {
             {1, 1, 1},
+            {1, 1, 1},
             {1, 1, 1}
         };
         // sumX = (0+1+2) + (0+1+2) = 6
         // sumY = (0+0+0) + (1+1+1) = 3
         // size = 6
         // centroid = (6/6, 3/6) = (1, 0)
-        Group expectedGroup = new Group(6, new Coordinate(1, 0));
+        Group expectedGroup = new Group(9, new Coordinate(1, 1));
 
         // ACT
         List<Group> actualGroups = groupFinder.findConnectedGroups(image);

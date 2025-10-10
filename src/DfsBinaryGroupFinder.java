@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.CoreFactory;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
    /**
@@ -34,51 +39,54 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("size", 1);
+        map.put("maxX", 0);
+        map.put("maxY", 0);
+
         List<Group> groupList = new ArrayList<>();
 
+        for(int r = 0; r < image.length; r++){
+            for(int c = 0; c < image[0].length - 1; c++){
 
-        //find the first white pixel (on: 1) create a group 
-        for(int r=0; r<image.length; r++){
-            for(int c=0; c<image[0].length; c++){
-                if(image[r][c] == 1){
-                    
-                    //found a one not yet visited
-                    //create group 
-                    Coordinate point = new Coordinate(r,cgit);
-                    Group currentGroup = createGroup(point, 1, r, c, image);
-                    groupList.add(currentGroup);
-                    
+                Coordinate point = new Coordinate(r, c);
+
+                if(image[point.y()][point.x()] == 1){
+                    image[point.y()][point.x()] = 2;
+                    dfs(image, point, map);
+
+                    Coordinate centroid = new Coordinate(map.get("maxX")/map.get("size"), map.get("maxY")/map.get("size"));
+                    Group island = new Group(map.get("size"), centroid);
+                    groupList.add(island);
+
+                            map.put("size", 1);
+                            map.put("maxX", 0);
+                            map.put("maxY", 0);
                 }
             }
         }
-        //dfs through touching white pixels until we have found every pixel in the group
-        //find the next pixels that are on and not already found (maybe a vistedset)
-        //repeat until we have checked all pixels
-        //sort groups in the List
-        //return the list.
         return groupList;
     }
     
-    private Group createGroup(Coordinate point, int size, int xMax, int yMax, int[][] image){
+    private void dfs(int[][] image, Coordinate point, Map<String, Integer> map){
         int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
 
         for (int[] direction : directions) {
-            int newX = direction[0] + point.x();
-            int newY = direction[1] + point.y();
+            int newR = point.x() + direction[0];
+            int newC = point.y() + direction[1];
 
-            if(newX >= 0 && newX < image.length && newY >= 0 && newY < image[0].length && image[newX][newY] == 1){
-                image[newX][newY] = 2;
-                size++;
-                xMax += newX;
-                yMax += newY;
-            }
+            if(newR < 0 || newR >= image.length || newC < 0 || newC >= image[0].length || image[newR][newC] != 1) continue;
+            image[newR][newC] = 2;
+
+            map.put("size", map.get("size")+1);
+            map.put("maxX", map.get("maxX")+newC);
+            map.put("maxY", map.get("maxY")+newR);
+
+            dfs(image,new Coordinate(newR,newC), map);
+            
         }
-        //calculate centroid
-        int centX = xMax/size;
-        int centY = yMax/size;
-        Coordinate center = new Coordinate(centX, centY);
-        Group island = new Group(size, center);
-        return island;
+
+        return;
     }
 
 

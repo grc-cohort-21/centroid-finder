@@ -50,7 +50,7 @@ public class DistanceImageBinarizer implements ImageBinarizer {
         int[][] result = new int[sizeY][sizeX];
         for(int r = 0; r < sizeY; r++){
             for(int c = 0; c < sizeX; c++){
-                if(distanceFinder.distance(image.getRGB(sizeX, sizeY), targetColor) <= 50){
+                if(distanceFinder.distance(image.getRGB(c, r), targetColor) <= 150){
                     result[r][c] = 1;
                 }else{
                     result[r][c] = 0;

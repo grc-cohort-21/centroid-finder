@@ -71,4 +71,73 @@ class DistanceImageBinarizerTest {
         assertEquals(4, result.length);       // height
         assertEquals(3, result[0].length);    // width
     }
+
+    @Test
+    void testToBufferedImage_AllWhitePixels() {
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
+
+        int[][] binaryArray = {
+            {1, 1},
+            {1, 1}
+        };
+
+        BufferedImage image = binarizer.toBufferedImage(binaryArray);
+
+        // Expect each pixel to be white (0xFFFFFF)
+        for (int r = 0; r < binaryArray.length; r++) {
+            for (int c = 0; c < binaryArray[0].length; c++) {
+                assertEquals(0xFFFFFF, image.getRGB(r, c));
+            }
+        }
+    }
+
+    @Test
+    void testToBufferedImage_AllBlackPixels() {
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
+
+        int[][] binaryArray = {
+            {0, 0},
+            {0, 0}
+        };
+
+        BufferedImage image = binarizer.toBufferedImage(binaryArray);
+
+        // Expect each pixel to be black (0x000000)
+        for (int r = 0; r < binaryArray.length; r++) {
+            for (int c = 0; c < binaryArray[0].length; c++) {
+                assertEquals(0x000000, image.getRGB(r, c));
+            }
+        }
+    }
+
+    @Test
+    void testToBufferedImage_MixedPixels() {
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
+
+        int[][] binaryArray = {
+            {1, 0},
+            {0, 1}
+        };
+
+        BufferedImage image = binarizer.toBufferedImage(binaryArray);
+
+        // Check four pixels individually
+        assertEquals(0xFFFFFF, image.getRGB(0, 0)); // expected white
+        assertEquals(0x000000, image.getRGB(0, 1)); // expected black
+        assertEquals(0x000000, image.getRGB(1, 0)); // expected black
+        assertEquals(0xFFFFFF, image.getRGB(1, 1)); // expected white
+    }
+
+    @Test
+    void testToBufferedImage_DimensionsMatch() {
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
+
+        int[][] binaryArray = new int[3][5]; // height = 3, width = 5
+        BufferedImage image = binarizer.toBufferedImage(binaryArray);
+
+        // According to current code, width = image.length, height = image[0].length
+        assertEquals(3, image.getWidth());
+        assertEquals(5, image.getHeight());
+    }
+
 }

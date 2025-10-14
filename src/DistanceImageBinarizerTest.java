@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.BufferedImage;
+import java.io.Console;
 
 class DistanceImageBinarizerTest {
 
@@ -52,7 +53,9 @@ class DistanceImageBinarizerTest {
 
         DistanceImageBinarizer binarizer = new DistanceImageBinarizer(mockFinder, 0xFFFFFF, 150);
         int[][] result = binarizer.toBinaryArray(image);
+        System.out.println(result[0]);
 
+        
         assertEquals(1, result[0][0]);
         assertEquals(0, result[0][1]);
     }

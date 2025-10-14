@@ -45,13 +45,13 @@ class DistanceImageBinarizerTest {
     @Test
     void testToBinaryArray_MixedPixels() {
         // Alternating distances
-        ColorDistanceFinder mockFinder = (color1, color2) -> (color1 == 0x000000) ? 100.0 : 200.0;
+        ColorDistanceFinder mockFinder = (color1, color2) -> (color1 == color2) ? 0 : 200.0;
 
         BufferedImage image = new BufferedImage(2, 1, BufferedImage.TYPE_INT_RGB);
-        image.setRGB(0, 0, 0x000000); // distance 100 → 1
+        image.setRGB(0, 0, 0x000000); // distance 0 → 1
         image.setRGB(1, 0, 0xFFFFFF); // distance 200 → 0
 
-        DistanceImageBinarizer binarizer = new DistanceImageBinarizer(mockFinder, 0xFFFFFF, 150);
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer(mockFinder, 0x000000, 150);
         int[][] result = binarizer.toBinaryArray(image);
         System.out.println(result[0]);
 

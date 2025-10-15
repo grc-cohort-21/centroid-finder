@@ -71,11 +71,14 @@ public class DistanceImageBinarizer implements ImageBinarizer {
      */
     @Override
     public BufferedImage toBufferedImage(int[][] image) {
+        int rowLength = image.length;
+        int colLength = image[0].length;
         BufferedImage result = new BufferedImage(image.length, image[0].length, BufferedImage.TYPE_INT_ARGB);
         for(int r=0; r<image.length; r++){
             for(int c=0; c<image[0].length; c++){ 
-               if(image[r][c] == 1) result.setRGB(c, r, 0xFFFFFF);
-               if(image[r][c] == 0) result.setRGB(c, r, 0x000000);
+               if(image[r][c] == 1) result.setRGB(r, c, 0xFFFFFF);
+               System.out.println(image[r][c]);
+               if(image[r][c] == 0) result.setRGB(r, c, 0x000000);
             }
         }
         return result;

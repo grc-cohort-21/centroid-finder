@@ -50,10 +50,10 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             for(int c = 0; c < image[0].length; c++){
 
                 if(image[r][c] == 1){
-                    map.put("size", 1);
-                    map.put("maxX", c);
-                    map.put("maxY", r);
-                    image[r][c] = 2;
+                    map.put("size", 0);
+                    map.put("maxX", 0);
+                    map.put("maxY", 0);
+                   
                     dfsIterative(image, new Coordinate(c, r), map);
 
                     Coordinate centroid = new Coordinate(map.get("maxX")/map.get("size"), map.get("maxY")/map.get("size"));

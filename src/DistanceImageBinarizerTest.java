@@ -110,23 +110,24 @@ class DistanceImageBinarizerTest {
         }
     }
 
-    @Test
-    void testToBufferedImage_MixedPixels() {
-        DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
+  @Test
+void testToBufferedImage_MixedPixels() {
+    DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
 
-        int[][] binaryArray = {
-            {1, 0},
-            {0, 1}
-        };
+    // Use asymmetrical data: a rectangle or non-symmetrical values
+    int[][] binaryArray = {
+        {1, 0}, // row 0: white, black
+        {1, 1}  // row 1: white, white
+    };
 
-        BufferedImage image = binarizer.toBufferedImage(binaryArray);
+    BufferedImage image = binarizer.toBufferedImage(binaryArray);
 
-        // Check four pixels individually
-        assertEquals(0xFFFFFF, image.getRGB(0, 0)); // expected white
-        assertEquals(0x000000, image.getRGB(0, 1)); // expected black
-        assertEquals(0x000000, image.getRGB(1, 0)); // expected black
-        assertEquals(0xFFFFFF, image.getRGB(1, 1)); // expected white
-    }
+   
+    assertEquals(0xFFFFFF, image.getRGB(0, 0)); 
+    assertEquals(0x000000, image.getRGB(1, 0)); 
+    assertEquals(0xFFFFFF, image.getRGB(0, 1)); 
+    assertEquals(0xFFFFFF, image.getRGB(1, 1)); 
+}
 
     @Test
     void testToBufferedImage_DimensionsMatch() {
@@ -136,8 +137,23 @@ class DistanceImageBinarizerTest {
         BufferedImage image = binarizer.toBufferedImage(binaryArray);
 
         // According to current code, width = image.length, height = image[0].length
-        assertEquals(3, image.getWidth());
-        assertEquals(5, image.getHeight());
+        assertEquals(5, image.getWidth());
+        assertEquals(3, image.getHeight());
     }
+
+    @Test
+void testToBinaryArray_PixelsOnThreshold() {
+    // Mock finder that returns a distance exactly equal to the threshold
+    ColorDistanceFinder mockFinder = (color1, color2) -> 150.0;
+
+    BufferedImage image = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+    DistanceImageBinarizer binarizer = new DistanceImageBinarizer(mockFinder, 0xFFFFFF, 150);
+
+    int[][] result = binarizer.toBinaryArray(image);
+
+    // Because the logic is <=, pixels on the threshold should be white (1)
+    assertArrayEquals(new int[]{1, 1}, result[0]);
+    assertArrayEquals(new int[]{1, 1}, result[1]);
+}
 
 }

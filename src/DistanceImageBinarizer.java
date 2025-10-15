@@ -77,9 +77,9 @@ public class DistanceImageBinarizer implements ImageBinarizer {
         BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         for(int r=0; r<height; r++){
             for(int c=0; c<width; c++){ 
-               if(image[r][c] == 1) result.setRGB(c, r, 0xFFFFFF);
+               if(image[r][c] == 1) result.setRGB(c, r, 0xFFFFFFFF);
             
-               if(image[r][c] == 0) result.setRGB(c, r, 0x000000);
+               if(image[r][c] == 0) result.setRGB(c, r, 0xFF000000);
             }
         }
         return result;

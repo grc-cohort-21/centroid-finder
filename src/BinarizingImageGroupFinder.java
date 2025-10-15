@@ -43,6 +43,7 @@ public class BinarizingImageGroupFinder implements ImageGroupFinder {
         List<Group> result = groupFinder.findConnectedGroups(binary2d);
 
         Collections.sort(result);
+        Collections.reverse(result);
 
         return result;
     }

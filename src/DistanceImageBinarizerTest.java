@@ -64,11 +64,11 @@ class DistanceImageBinarizerTest {
     void testToBinaryArray_ReturnsArrayWithSameDimensions() {
         ColorDistanceFinder mockFinder = (color1, color2) -> 100.0;
 
-        BufferedImage image = new BufferedImage(3, 4, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(3, 5, BufferedImage.TYPE_INT_RGB);
         DistanceImageBinarizer binarizer = new DistanceImageBinarizer(mockFinder, 0x000000, 150);
         int[][] result = binarizer.toBinaryArray(image);
 
-        assertEquals(4, result.length);       // height
+        assertEquals(5, result.length);       // height
         assertEquals(3, result[0].length);    // width
     }
 
@@ -133,12 +133,12 @@ void testToBufferedImage_MixedPixels() {
     void testToBufferedImage_DimensionsMatch() {
         DistanceImageBinarizer binarizer = new DistanceImageBinarizer((a, b) -> 0.0, 0x000000, 100);
 
-        int[][] binaryArray = new int[3][5]; // height = 3, width = 5
+        int[][] binaryArray = new int[5][3]; // width = 3, height = 5
         BufferedImage image = binarizer.toBufferedImage(binaryArray);
 
-        // According to current code, width = image.length, height = image[0].length
-        assertEquals(5, image.getWidth());
-        assertEquals(3, image.getHeight());
+      
+        assertEquals(3, image.getWidth());
+        assertEquals(5, image.getHeight());
     }
 
     @Test

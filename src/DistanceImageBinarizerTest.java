@@ -86,7 +86,7 @@ class DistanceImageBinarizerTest {
         // Expect each pixel to be white (0xFFFFFF)
         for (int r = 0; r < binaryArray.length; r++) {
             for (int c = 0; c < binaryArray[0].length; c++) {
-                assertEquals(0xFFFFFF, image.getRGB(r, c));
+                assertEquals(0xFFFFFFFF, image.getRGB(r, c));
             }
         }
     }
@@ -105,7 +105,7 @@ class DistanceImageBinarizerTest {
         // Expect each pixel to be black (0x000000)
         for (int r = 0; r < binaryArray.length; r++) {
             for (int c = 0; c < binaryArray[0].length; c++) {
-                assertEquals(0x000000, image.getRGB(r, c));
+                assertEquals(0xFF000000, image.getRGB(r, c));
             }
         }
     }
@@ -123,10 +123,10 @@ void testToBufferedImage_MixedPixels() {
     BufferedImage image = binarizer.toBufferedImage(binaryArray);
 
    
-    assertEquals(0xFFFFFF, image.getRGB(0, 0)); 
-    assertEquals(0x000000, image.getRGB(1, 0)); 
-    assertEquals(0xFFFFFF, image.getRGB(0, 1)); 
-    assertEquals(0xFFFFFF, image.getRGB(1, 1)); 
+    assertEquals(0xFFFFFFFF, image.getRGB(0, 0)); 
+    assertEquals(0xFF000000, image.getRGB(1, 0)); 
+    assertEquals(0xFFFFFFFF, image.getRGB(0, 1)); 
+    assertEquals(0xFFFFFFFF, image.getRGB(1, 1)); 
 }
 
     @Test

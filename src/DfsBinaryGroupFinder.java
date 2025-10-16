@@ -1,4 +1,8 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
    /**
@@ -30,7 +34,92 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
-        return null;
+        if(image == null) throw new NullPointerException("array cannot be null");
+        if (image.length == 0 || image[0].length == 0) throw new IllegalArgumentException("array cannot be empty");
+        for (int[] subarray: image) {
+            if (subarray == null) throw new NullPointerException("subarray cannot be null");
+            for (int num : subarray) {
+                if (num != 0 && num != 1) throw new IllegalArgumentException("array can only contain values of 1 or 0");
+            }
+        }
+        boolean[][] visited = new boolean[image.length][image[0].length];
+        List<Group> groups = new ArrayList<>();
+      
+        for (int row = 0; row < image.length; row++) {
+            for (int col = 0; col < image[0].length; col++) {
+                if (image[row][col] == 1 && !visited[row][col]) {
+                    List<int[]> pixels = new ArrayList<>();
+                    findConnectedGroups(row, col, image, visited, pixels);
+                    groups.add(createGroup(pixels));
+                }
+            }
+        }
+        Collections.sort(groups, Collections.reverseOrder());
+        return groups;
+    }
+
+    public static void findConnectedGroups(int row, int col, int[][] image, boolean[][] visited, List<int[]> pixels) {
+        if (visited[row][col]) return;
+
+        Queue<int[]> queue = new LinkedList<>();
+        visited[row][col] = true;
+        queue.offer(new int[] { row, col });
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int r = current[0];
+            int c = current[1];
+            pixels.add(new int[] { r, c });
+            
+            List<int[]> neighbors = validNeighbors(r, c, image, visited);
+
+            for (int[] n : neighbors) {
+               int nR = n[0];
+               int nC = n[1];
+               visited[nR][nC] = true;
+               queue.offer(n); 
+            } 
+        }
+    }
+
+    public static List<int[]> validNeighbors(int row, int col, int[][] image, boolean[][] visited) {
+        int[][] moves = {
+            {-1, 0}, 
+            {1, 0},  
+            {0, 1}, 
+            {0, -1}  
+        };
+
+        List<int[]> neighbors = new ArrayList<>();
+
+        for (int[] move : moves) {
+            int newRow = row + move[0];
+            int newCol = col + move[1];
+            if (newRow >= 0 &&
+                newRow < image.length &&
+                newCol >= 0 &&
+                newCol < image[0].length &&
+                image[newRow][newCol] == 1 &&
+                !visited[newRow][newCol]) {
+                neighbors.add(new int[] { newRow, newCol });
+            }
+        }
+        return neighbors;
     }
     
+    public static Group createGroup(List<int[]> pixels) {
+        int size = pixels.size();
+        int rowSum = 0;
+        int colSum = 0;
+        
+        for(int[]pix : pixels) {
+            rowSum += pix[0];
+            colSum += pix[1];
+        }
+        int rowCord = rowSum / size;
+        int colCord = colSum / size;
+
+        Coordinate coord = new Coordinate(colCord, rowCord);
+        return new Group(size, coord);
+    }
 }

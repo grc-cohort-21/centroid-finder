@@ -1,4 +1,13 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.CoreFactory;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
    /**
@@ -30,7 +39,79 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
-        return null;
+        Map<String, Integer> map = new HashMap<>();
+
+        List<Group> groupList = new ArrayList<>();
+
+        for(int r = 0; r < image.length; r++){
+            for(int c = 0; c < image[0].length; c++){
+
+                if(image[r][c] == 1){
+                    map.put("size", 0);
+                    map.put("maxX", 0);
+                    map.put("maxY", 0);
+                   
+                    dfsIterative(image, new Coordinate(c, r), map);
+
+                    Coordinate centroid = new Coordinate(map.get("maxX")/map.get("size"), map.get("maxY")/map.get("size"));
+                    Group island = new Group(map.get("size"), centroid);
+                    groupList.add(island);
+
+                }
+            }
+        }
+        Collections.sort(groupList);
+        Collections.reverse(groupList);
+        return groupList;
     }
     
+    private void dfs(int[][] image, Coordinate point, Map<String, Integer> map){
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+
+        for (int[] direction : directions) {
+            int newR = point.y() + direction[0];
+            int newC = point.x() + direction[1];
+
+            if(newR < 0 || newR >= image.length || newC < 0 || newC >= image[0].length ) continue;
+            if(image[newR][newC] != 1) continue;
+            image[newR][newC] = 2;
+
+            map.put("size", map.get("size")+1);
+            map.put("maxX", map.get("maxX")+newC);
+            map.put("maxY", map.get("maxY")+newR);
+
+            dfs(image,new Coordinate(newC,newR), map);
+            
+        }
+        return;
+    }
+
+        private void dfsIterative(int[][] image, Coordinate point, Map<String, Integer> map){
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+        Stack<Coordinate> stack = new Stack<>();
+
+        stack.push(point);
+        while (!stack.isEmpty()) {
+            Coordinate cur = stack.pop();
+            int r = cur.y();
+            int c = cur.x();
+
+            if(image[r][c] != 1) continue;
+            image[r][c] = 2;
+
+            map.put("size", map.get("size")+1);
+            map.put("maxX", map.get("maxX")+c);
+            map.put("maxY", map.get("maxY")+r);
+
+            for (int[] direction : directions) {
+                int newR = r + direction[0];
+                int newC = c + direction[1];
+                if(newR >= 0 && newR < image.length && newC >= 0 && newC < image[0].length && image[newR][newC] == 1){
+                    stack.push(new Coordinate(newC,newR));   
+                }
+            }
+            
+        }
+        return;
+    }
 }

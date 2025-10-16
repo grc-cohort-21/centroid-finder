@@ -45,11 +45,11 @@ public class DistanceImageBinarizer implements ImageBinarizer {
      */
     @Override
     public int[][] toBinaryArray(BufferedImage image) {
-        int sizeY = image.getHeight();
-        int sizeX = image.getWidth();
-        int[][] result = new int[sizeY][sizeX];
-        for(int r = 0; r < sizeY; r++){
-            for(int c = 0; c < sizeX; c++){
+        int height = image.getHeight();
+        int width = image.getWidth();
+        int[][] result = new int[height][width];
+        for(int r = 0; r < height; r++){
+            for(int c = 0; c < width; c++){
                 int color = image.getRGB(c, r) & 0x00ffffff;
                 if(distanceFinder.distance(color, targetColor) <= threshold){
                     result[r][c] = 1;
@@ -71,11 +71,15 @@ public class DistanceImageBinarizer implements ImageBinarizer {
      */
     @Override
     public BufferedImage toBufferedImage(int[][] image) {
-        BufferedImage result = new BufferedImage(image.length, image[0].length, BufferedImage.TYPE_INT_ARGB);
-        for(int r=0; r<image.length; r++){
-            for(int c=0; c<image[0].length; c++){ 
-               if(image[r][c] == 1) result.setRGB(c, r, 0xFFFFFF);
-               if(image[r][c] == 0) result.setRGB(c, r, 0x000000);
+        //I think image is organized as R, C
+        int height = image.length;
+        int width = image[0].length;
+        BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for(int r=0; r<height; r++){
+            for(int c=0; c<width; c++){ 
+               if(image[r][c] == 1) result.setRGB(c, r, 0xFFFFFFFF);
+            
+               if(image[r][c] == 0) result.setRGB(c, r, 0xFF000000);
             }
         }
         return result;

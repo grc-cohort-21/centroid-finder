@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.CoreFactory;
 
@@ -46,11 +47,11 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             for(int c = 0; c < image[0].length; c++){
 
                 if(image[r][c] == 1){
-                    map.put("size", 1);
-                    map.put("maxX", c);
-                    map.put("maxY", r);
-                    image[r][c] = 2;
-                    dfs(image, new Coordinate(c, r), map);
+                    map.put("size", 0);
+                    map.put("maxX", 0);
+                    map.put("maxY", 0);
+                   
+                    dfsIterative(image, new Coordinate(c, r), map);
 
                     Coordinate centroid = new Coordinate(map.get("maxX")/map.get("size"), map.get("maxY")/map.get("size"));
                     Group island = new Group(map.get("size"), centroid);
@@ -71,7 +72,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             int newR = point.y() + direction[0];
             int newC = point.x() + direction[1];
 
-            if(newR < 0 || newR >= image.length || newC < 0 || newC >= image[0].length || image[newR][newC] != 1) continue;
+            if(newR < 0 || newR >= image.length || newC < 0 || newC >= image[0].length ) continue;
+            if(image[newR][newC] != 1) continue;
             image[newR][newC] = 2;
 
             map.put("size", map.get("size")+1);
@@ -81,10 +83,35 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             dfs(image,new Coordinate(newC,newR), map);
             
         }
-
         return;
     }
 
+        private void dfsIterative(int[][] image, Coordinate point, Map<String, Integer> map){
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+        Stack<Coordinate> stack = new Stack<>();
 
+        stack.push(point);
+        while (!stack.isEmpty()) {
+            Coordinate cur = stack.pop();
+            int r = cur.y();
+            int c = cur.x();
 
+            if(image[r][c] != 1) continue;
+            image[r][c] = 2;
+
+            map.put("size", map.get("size")+1);
+            map.put("maxX", map.get("maxX")+c);
+            map.put("maxY", map.get("maxY")+r);
+
+            for (int[] direction : directions) {
+                int newR = r + direction[0];
+                int newC = c + direction[1];
+                if(newR >= 0 && newR < image.length && newC >= 0 && newC < image[0].length && image[newR][newC] == 1){
+                    stack.push(new Coordinate(newC,newR));   
+                }
+            }
+            
+        }
+        return;
+    }
 }
